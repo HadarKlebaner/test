@@ -43,7 +43,7 @@
       --ink: #657B8A;
       --ink-deep: #4E626F;
       --stripe-w: 22px;
-      --scallop: 9px;
+      --radius: 22px;
 
       /* Coastal wash palette used to fill the line art */
       --blush: #F4C7BF;
@@ -55,10 +55,12 @@
       --sage:  #C7DBB6;
       --olive: #A2C48F;
       --cream: #FBF1E2;
+      --paper: #FEFAF2;
+      --gold-deep: #D2A244;
     }
 
     @media (min-width: 640px) {
-      :root { --stripe-w: 34px; --scallop: 11px; }
+      :root { --stripe-w: 34px; --radius: 28px; }
     }
 
     html { -webkit-text-size-adjust: 100%; }
@@ -82,8 +84,8 @@
         to right,
         var(--stripe) 0,
         var(--stripe) var(--stripe-w),
-        #FFFFFF var(--stripe-w),
-        #FFFFFF calc(var(--stripe-w) * 2)
+        var(--paper) var(--stripe-w),
+        var(--paper) calc(var(--stripe-w) * 2)
       );
     }
 
@@ -95,25 +97,19 @@
               drop-shadow(0 2px 4px rgba(78, 98, 111, 0.08));
     }
 
-    /* Scalloped edge: an inset core rect, plus circles tiled edge-to-edge that bump out the perimeter */
     .card {
       position: relative;
-      background-color: #FFFFFF;
-      --s: calc(var(--scallop) * 2);
-      -webkit-mask:
-        radial-gradient(farthest-side, #000 97%, #0000) 0 0 / var(--s) var(--s) round,
-        linear-gradient(#000 0 0) center / calc(100% - var(--s)) calc(100% - var(--s)) no-repeat;
-      mask:
-        radial-gradient(farthest-side, #000 97%, #0000) 0 0 / var(--s) var(--s) round,
-        linear-gradient(#000 0 0) center / calc(100% - var(--s)) calc(100% - var(--s)) no-repeat;
+      background-color: var(--paper);
+      border-radius: var(--radius);
     }
 
     /* Inset hairline frame, the classic stationery detail */
     .card::after {
       content: '';
       position: absolute;
-      inset: calc(var(--scallop) + 9px);
+      inset: 14px;
       border: 1px solid rgba(101, 123, 138, 0.22);
+      border-radius: calc(var(--radius) - 10px);
       pointer-events: none;
     }
 
@@ -145,8 +141,8 @@
       font-size: 6.5rem;
       line-height: 1;
       letter-spacing: -.05em;
-      color: var(--stripe);
-      opacity: .4;
+      color: var(--gold);
+      opacity: .45;
       pointer-events: none;
       user-select: none;
     }
@@ -166,8 +162,8 @@
     }
 
     /* Wide horizontal day track — the neighbours stay in frame but blurred.
-       Stops just inside the card's hairline frame (scallop + 9px). */
-    .bleed { margin-inline: calc(-1 * var(--pad-x) + var(--scallop) + 13px); }
+       Stops just inside the scalloped edge. */
+    .bleed { margin-inline: calc(-1 * var(--pad-x) + 1rem); }
 
     .track {
       display: flex;
@@ -221,7 +217,7 @@
     }
     .rail-ink { stroke: var(--stripe); }
     .rail-fill {
-      stroke: var(--sea);
+      stroke: var(--gold-deep);
       stroke-dasharray: 1;
       stroke-dashoffset: calc(1 - var(--p, 0));
       transition: stroke-dashoffset .7s cubic-bezier(.16, 1, .3, 1);
@@ -247,21 +243,21 @@
       opacity: .8;
       transition: transform .6s cubic-bezier(.16, 1, .3, 1), opacity .45s ease;
     }
-    .tl.is-on .tl-ico { --ink: var(--sea); opacity: 1; transform: translateY(-3px) scale(1.14); }
+    .tl.is-on .tl-ico { --ink: var(--gold-deep); opacity: 1; transform: translateY(-3px) scale(1.14); }
 
     .tl i {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #fff;
+      background: var(--paper);
       border: 1.5px solid var(--stripe);
       transition: transform .5s cubic-bezier(.16, 1, .3, 1), background-color .4s ease, border-color .4s ease, box-shadow .4s ease;
     }
     .tl.is-on i {
-      background: var(--sea);
-      border-color: var(--sea);
+      background: var(--gold-deep);
+      border-color: var(--gold-deep);
       transform: scale(1.3);
-      box-shadow: 0 0 0 5px rgba(134,189,199,.16);
+      box-shadow: 0 0 0 5px rgba(210, 162, 68, .18);
     }
     .tl b {
       margin-top: .5rem;
@@ -278,7 +274,7 @@
       height: 36px;
       border-radius: 50%;
       border: 1px solid rgba(101,123,138,.28);
-      background: #fff;
+      background: var(--paper);
       display: grid;
       place-items: center;
       transition: opacity .35s ease, border-color .35s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
@@ -294,6 +290,8 @@
       border-radius: 20px;
       background: linear-gradient(180deg, rgba(var(--tint), .5) 0%, rgba(var(--tint), .14) 100%);
     }
+
+    .tile.warm { --tint: 238, 214, 160; }
 
     .caps {
       letter-spacing: .34em;
@@ -472,7 +470,7 @@
     </defs>
   </svg>
 
-  <div class="px-3 sm:px-4 py-6 sm:py-14 space-y-6 sm:space-y-12">
+  <div class="px-7 sm:px-4 py-6 sm:py-14 space-y-6 sm:space-y-12">
 
     <!-- ============ INVITATION ============ -->
     <main class="shell reveal" style="--d:0ms">
@@ -523,19 +521,19 @@
         <h2 id="countdown-title" class="font-script text-[2.6rem] sm:text-[3rem] leading-none text-slateBlue mb-8" dir="ltr">The Countdown</h2>
 
         <div dir="ltr" class="grid grid-cols-4 gap-2" aria-live="polite">
-          <div class="tile !px-1 !py-4 !rounded-2xl">
+          <div class="tile warm !px-1 !py-4 !rounded-2xl">
             <div id="cd-days" class="num font-serifEng text-[1.75rem] sm:text-[2.15rem] leading-none text-deepSlate">--</div>
             <div class="caps text-[8.5px] sm:text-[9.5px] mt-3 opacity-75">Days</div>
           </div>
-          <div class="tile !px-1 !py-4 !rounded-2xl">
+          <div class="tile warm !px-1 !py-4 !rounded-2xl">
             <div id="cd-hours" class="num font-serifEng text-[1.75rem] sm:text-[2.15rem] leading-none text-deepSlate">--</div>
             <div class="caps text-[8.5px] sm:text-[9.5px] mt-3 opacity-75">Hours</div>
           </div>
-          <div class="tile !px-1 !py-4 !rounded-2xl">
+          <div class="tile warm !px-1 !py-4 !rounded-2xl">
             <div id="cd-mins" class="num font-serifEng text-[1.75rem] sm:text-[2.15rem] leading-none text-deepSlate">--</div>
             <div class="caps text-[8.5px] sm:text-[9.5px] mt-3 opacity-75">Mins</div>
           </div>
-          <div class="tile !px-1 !py-4 !rounded-2xl">
+          <div class="tile warm !px-1 !py-4 !rounded-2xl">
             <div id="cd-secs" class="num font-serifEng text-[1.75rem] sm:text-[2.15rem] leading-none text-deepSlate">--</div>
             <div class="caps text-[8.5px] sm:text-[9.5px] mt-3 opacity-75">Secs</div>
           </div>
