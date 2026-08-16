@@ -97,6 +97,16 @@
               drop-shadow(0 2px 4px rgba(78, 98, 111, 0.08));
     }
 
+    .page-stack { display: flex; flex-direction: column; }
+    .stack-invitation { order: 1; }
+    .stack-countdown  { order: 2; }
+    .stack-flight     { order: 3; }
+    .stack-villa      { order: 4; }
+    .stack-itinerary  { order: 5; }
+    .stack-details    { order: 6; }
+    .stack-packing    { order: 7; }
+    .stack-footer     { order: 8; }
+
     .card {
       position: relative;
       background-color: var(--paper);
@@ -172,9 +182,10 @@
       padding-inline: 12%;
       overflow-x: auto;
       overflow-y: hidden;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
       scrollbar-width: none;
       -ms-overflow-style: none;
       transition: height .65s cubic-bezier(.16, 1, .3, 1);
@@ -293,6 +304,138 @@
 
     .tile.warm { --tint: 238, 214, 160; }
 
+    .flight-route {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .flight-line {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      color: var(--gold-deep);
+    }
+    .flight-line::before,
+    .flight-line::after {
+      content: '';
+      width: 1.25rem;
+      height: 1px;
+      background: rgba(101, 123, 138, .35);
+    }
+
+    /* Packing checklist — tactile, compact and easy to scan on mobile */
+    .packing-group + .packing-group {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(101, 123, 138, .18);
+    }
+
+    .packing-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      cursor: pointer;
+      line-height: 1.55;
+    }
+    .packing-item + .packing-item { margin-top: .8rem; }
+
+    .packing-item input {
+      flex: 0 0 auto;
+      width: 1.05rem;
+      height: 1.05rem;
+      margin-top: .2rem;
+      accent-color: var(--gold-deep);
+      cursor: pointer;
+    }
+
+    .packing-item span { transition: opacity .25s ease, text-decoration-color .25s ease; }
+    .packing-item input:checked + span {
+      opacity: .48;
+      text-decoration: line-through;
+      text-decoration-color: var(--gold-deep);
+    }
+
+    /* Villa photo strip — horizontal snap-scroll gallery */
+    .villa-strip {
+      display: flex;
+      gap: .75rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      touch-action: pan-x pinch-zoom;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .villa-strip::-webkit-scrollbar { display: none; }
+
+    .villa-photo {
+      flex: 0 0 82%;
+      scroll-snap-align: start;
+      margin: 0;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(135deg, var(--aqua), var(--sea));
+      box-shadow: 0 6px 20px rgba(78, 98, 111, .18);
+    }
+    .villa-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(210, 162, 68, .35);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    .villa-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    @media (min-width: 640px) {
+      .villa-photo { flex-basis: 46%; aspect-ratio: 4 / 3; }
+    }
+
+    .villa-nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(101, 123, 138, .28);
+      background: var(--paper);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: opacity .3s ease, transform .3s cubic-bezier(.16, 1, .3, 1), border-color .3s ease;
+    }
+    .villa-nav-btn:disabled { opacity: .28; cursor: default; }
+    .villa-nav-btn:not(:disabled):hover { border-color: var(--gold-deep); transform: scale(1.08); }
+
+    .location-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      min-height: 44px;
+      padding: .7rem 1.15rem;
+      border: 1px solid rgba(101, 123, 138, .3);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink-deep);
+      text-decoration: none;
+      transition: transform .3s cubic-bezier(.16, 1, .3, 1), border-color .3s ease, box-shadow .3s ease;
+    }
+    .location-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold-deep);
+      box-shadow: 0 6px 16px rgba(78, 98, 111, .12);
+    }
+
     .caps {
       letter-spacing: .34em;
       text-transform: uppercase;
@@ -325,26 +468,19 @@
 
     .reveal {
       opacity: 0;
-      transform: translate3d(0, 36px, 0) scale(.965);
+      transform: translate3d(0, 18px, 0);
       transition:
-        opacity 1s cubic-bezier(.16, 1, .3, 1),
-        transform 1.15s cubic-bezier(.16, 1, .3, 1),
-        filter 1s cubic-bezier(.16, 1, .3, 1);
+        opacity .5s cubic-bezier(.16, 1, .3, 1),
+        transform .55s cubic-bezier(.16, 1, .3, 1);
       transition-delay: var(--d, 0ms);
       will-change: opacity, transform;
     }
     .reveal.is-visible { opacity: 1; transform: none; }
 
-    /* Blur is applied to the card, not the .shell wrapper, so its drop-shadow survives */
-    .reveal:not(.shell) { filter: blur(5px); }
-    .reveal:not(.shell).is-visible { filter: none; }
-
-    .shell.reveal > .card {
-      filter: blur(5px);
-      transition: filter 1s cubic-bezier(.16, 1, .3, 1);
-      transition-delay: var(--d, 0ms);
+    /* On phones: skip the fade-in entirely so content is instantly usable */
+    @media (max-width: 640px) {
+      .reveal { opacity: 1; transform: none; transition: none; }
     }
-    .shell.reveal.is-visible > .card { filter: none; }
 
     /* Slow drift, gives the line-art shells a little life */
     @keyframes drift {
@@ -363,7 +499,7 @@
     @media (max-width: 480px) {
       .track { padding-inline: 7%; gap: 4%; }
       .day { padding: 1.5rem .5rem .75rem; }
-      .day-ghost { font-size: 4.75rem; }
+      .day-ghost { font-size: 4rem; opacity: .22; }
       .rail { margin-bottom: 1.75rem; }
       .tl-ico { width: 34px; height: 34px; }
       .nav-btn { width: 40px; height: 40px; }
@@ -470,10 +606,10 @@
     </defs>
   </svg>
 
-  <div class="px-7 sm:px-4 py-6 sm:py-14 space-y-6 sm:space-y-12">
+  <div class="page-stack px-7 sm:px-4 py-6 sm:py-14 space-y-6 sm:space-y-12">
 
     <!-- ============ INVITATION ============ -->
-    <main class="shell reveal" style="--d:0ms">
+    <main class="shell reveal stack-invitation" style="--d:0ms">
       <div class="card card-body text-center">
 
         <!-- Shell cluster -->
@@ -510,7 +646,7 @@
     </main>
 
     <!-- ============ COUNTDOWN ============ -->
-    <section class="shell reveal" style="--d:80ms" aria-labelledby="countdown-title">
+    <section class="shell reveal stack-countdown" style="--d:80ms" aria-labelledby="countdown-title">
       <div class="card card-body text-center">
 
         <svg viewBox="0 0 120 64" class="w-[124px] mx-auto mb-4" aria-hidden="true">
@@ -542,8 +678,78 @@
       </div>
     </section>
 
+    <!-- ============ FLIGHTS ============ -->
+    <section class="shell reveal stack-flight" style="--d:80ms" aria-labelledby="flights-title">
+      <div class="card card-body">
+
+        <div class="text-center mb-9">
+          <svg viewBox="0 0 64 64" class="w-12 mx-auto mb-3 drift-slow" aria-hidden="true">
+            <use href="#ico-plane" width="64" height="64" />
+          </svg>
+          <h2 id="flights-title" class="font-script text-[2.75rem] sm:text-[3.1rem] leading-none text-slateBlue" dir="ltr">The Flight</h2>
+          <p class="caps text-[9px] mt-3 opacity-60" dir="ltr">Israir &middot; September 2026</p>
+        </div>
+
+        <div class="space-y-5" dir="ltr">
+          <article class="tile text-center" aria-label="טיסת הלוך מתל אביב לרודוס">
+            <div class="flex items-center justify-between mb-5">
+              <div class="text-left">
+                <p class="caps text-[8px] opacity-60">Outbound</p>
+                <p class="num text-[14px] text-deepSlate mt-1">Thu, 03 Sep</p>
+              </div>
+              <p class="caps text-[11px] text-deepSlate">6H515</p>
+            </div>
+            <div class="flight-route">
+              <div>
+                <p class="text-[30px] leading-none text-deepSlate">TLV</p>
+                <p class="num text-[18px] mt-2">15:40</p>
+                <p class="font-hebrew text-[11px] opacity-60 mt-1" dir="rtl">תל אביב</p>
+              </div>
+              <div class="flight-line" aria-hidden="true">✈</div>
+              <div>
+                <p class="text-[30px] leading-none text-deepSlate">RHO</p>
+                <p class="num text-[18px] mt-2">17:20</p>
+                <p class="font-hebrew text-[11px] opacity-60 mt-1" dir="rtl">רודוס</p>
+              </div>
+            </div>
+            <div class="rule my-5"></div>
+            <div class="flex justify-center gap-8 text-[11px] opacity-70">
+              <span class="font-hebrew" dir="rtl">טרמינל 1</span>
+              <span class="font-hebrew" dir="rtl">משך הטיסה: 1:40</span>
+            </div>
+          </article>
+
+          <article class="tile warm text-center" aria-label="טיסת חזור מרודוס לתל אביב">
+            <div class="flex items-center justify-between mb-5">
+              <div class="text-left">
+                <p class="caps text-[8px] opacity-60">Return</p>
+                <p class="num text-[14px] text-deepSlate mt-1">Sun, 06 Sep</p>
+              </div>
+              <p class="caps text-[11px] text-deepSlate">6H516</p>
+            </div>
+            <div class="flight-route">
+              <div>
+                <p class="text-[30px] leading-none text-deepSlate">RHO</p>
+                <p class="num text-[18px] mt-2">18:20</p>
+                <p class="font-hebrew text-[11px] opacity-60 mt-1" dir="rtl">רודוס</p>
+              </div>
+              <div class="flight-line" aria-hidden="true">✈</div>
+              <div>
+                <p class="text-[30px] leading-none text-deepSlate">TLV</p>
+                <p class="num text-[18px] mt-2">19:55</p>
+                <p class="font-hebrew text-[11px] opacity-60 mt-1" dir="rtl">תל אביב</p>
+              </div>
+            </div>
+            <div class="rule my-5"></div>
+            <p class="font-hebrew text-[11px] opacity-70" dir="rtl">משך הטיסה: 1:35</p>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ============ ITINERARY ============ -->
-    <section class="shell reveal" style="--d:80ms" aria-labelledby="itinerary-title">
+    <section class="shell reveal stack-itinerary" style="--d:80ms" aria-labelledby="itinerary-title">
       <div class="card card-body">
 
         <div class="text-center mb-10">
@@ -667,8 +873,115 @@
       </div>
     </section>
 
+    <!-- ============ THE VILLA ============ -->
+    <!--
+      להחלפת התמונות:
+        • שמרי קבצים בתיקייה villa/ ליד ה-index.html ועדכני src (למשל villa/1.jpg)
+        • או פשוט הכניסי כתובת URL מלאה של תמונה מהאינטרנט (Google Drive לא יעבוד ישירות – השתמשי ב-Imgur / Cloudinary / Dropbox share link)
+    -->
+    <section class="shell reveal stack-villa" style="--d:80ms" aria-labelledby="villa-title">
+      <div class="card card-body">
+
+        <div class="text-center mb-8">
+          <svg viewBox="0 0 64 64" class="w-12 mx-auto mb-3 drift-slow" aria-hidden="true">
+            <use href="#ico-sun" width="64" height="64" style="--wash:var(--gold)"/>
+          </svg>
+          <h2 id="villa-title" class="font-script text-[2.75rem] sm:text-[3.1rem] leading-none text-slateBlue" dir="ltr">The Villa</h2>
+          <p class="caps text-[9px] mt-3 opacity-60" dir="ltr">Villa Blue Mare &middot; Lindos</p>
+        </div>
+
+        <div class="villa-strip" id="villa-strip" role="list" aria-label="תמונות הוילה" dir="ltr" tabindex="0">
+          <figure class="villa-photo" role="listitem"><img src="https://images.squarespace-cdn.com/content/v1/5ef8778b6e2fd3300c8e475d/1593343528091-NEXIBCE0MU8NJLS80DGS/18.jpeg?format=1000w" alt="Villa Blue Mare והבריכה הפרטית" loading="lazy" /></figure>
+          <figure class="villa-photo" role="listitem"><img src="https://images.squarespace-cdn.com/content/v1/5ef8778b6e2fd3300c8e475d/1593343528090-0CF2LNR1LUL0V2YMRYOL/16.jpeg?format=1000w" alt="הנוף מ-Villa Blue Mare במפרץ Navarone" loading="lazy" /></figure>
+          <figure class="villa-photo" role="listitem"><img src="https://images.squarespace-cdn.com/content/v1/5ef8778b6e2fd3300c8e475d/1593343528376-Y9T8IE5D5LO83AE0ZM2A/13.jpeg?format=1000w" alt="אזור האירוח של Villa Blue Mare" loading="lazy" /></figure>
+          <figure class="villa-photo" role="listitem"><img src="https://images.squarespace-cdn.com/content/v1/5ef8778b6e2fd3300c8e475d/1593343535474-C5J22GF85GQR63S8BAZZ/8.jpeg?format=1000w" alt="החצר והבריכה של Villa Blue Mare" loading="lazy" /></figure>
+          <figure class="villa-photo" role="listitem"><img src="https://images.squarespace-cdn.com/content/v1/5ef8778b6e2fd3300c8e475d/1625390566063-OYSB6FN35LVIRPI4RGN7/4b83d49a-f67f-461a-bcc3-1b315847b8fb.jpeg?format=1000w" alt="החוף הפרטי ליד Villa Blue Mare" loading="lazy" /></figure>
+        </div>
+
+        <div class="flex items-center justify-center gap-5 mt-6" dir="ltr" aria-label="ניווט בגלריית הווילה">
+          <button type="button" class="villa-nav-btn" data-villa-nav="-1" aria-label="תמונה קודמת" disabled>
+            <svg viewBox="0 0 24 24" class="w-4 h-4 draw" aria-hidden="true"><path d="M14.5 5.5 8.5 12l6 6.5"/></svg>
+          </button>
+          <span id="villa-counter" class="num text-[12px] opacity-65" aria-live="polite">1 / 5</span>
+          <button type="button" class="villa-nav-btn" data-villa-nav="1" aria-label="תמונה הבאה">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 draw" aria-hidden="true"><path d="M9.5 5.5 15.5 12l-6 6.5"/></svg>
+          </button>
+        </div>
+
+        <p class="text-center mt-3 font-hebrew font-light text-[12px] opacity-60" dir="rtl">אפשר גם להחליק לצדדים ✦</p>
+
+        <div class="tile mt-7 text-center" dir="rtl">
+          <svg viewBox="0 0 24 24" class="w-7 h-7 mx-auto mb-3 draw" aria-hidden="true">
+            <path d="M20 10c0 5.5-8 11-8 11S4 15.5 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          <h3 class="font-hebrew text-[18px] font-semibold text-deepSlate">Villa Blue Mare</h3>
+          <p class="font-hebrew font-light text-[14px] mt-2 leading-relaxed">לינדוס 851 07, רודוס, יוון</p>
+          <a class="location-link font-hebrew text-[13px] mt-5" href="https://www.google.com/maps/search/?api=1&amp;query=36.080703%2C28.0805191" target="_blank" rel="noopener noreferrer" aria-label="פתיחת מיקום Villa Blue Mare ב-Google Maps">
+            <span>פתיחה ב־<bdi dir="ltr">Google Maps</bdi></span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ PACKING LIST ============ -->
+    <section class="shell reveal stack-packing" style="--d:80ms" aria-labelledby="packing-title">
+      <div class="card card-body">
+
+        <div class="text-center mb-10">
+          <svg viewBox="0 0 64 64" class="w-12 mx-auto mb-3 drift-slow" aria-hidden="true">
+            <use href="#ico-starfish" width="64" height="64" style="--wash:var(--coral)"/>
+          </svg>
+          <h2 id="packing-title" class="font-hebrew text-[1.65rem] sm:text-[1.9rem] font-light leading-tight text-slateBlue" dir="rtl">רשימת ציוד</h2>
+        </div>
+
+        <div class="font-hebrew text-[15px] font-light text-deepSlate" dir="rtl">
+          <section class="packing-group" aria-labelledby="packing-essentials">
+            <h3 id="packing-essentials" class="text-[18px] font-semibold mb-4">מסמכים וחשובים</h3>
+            <div class="tile !py-5 !px-5">
+              <label class="packing-item"><input type="checkbox" /><span>דרכון (לוודא תוקף!) ✈️</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>ביטוח נסיעות</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>מטען קיר + מטען נייד לטלפון</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>אירו במזומן וכרטיס אשראי</span></label>
+            </div>
+          </section>
+
+          <section class="packing-group" aria-labelledby="packing-clothes">
+            <h3 id="packing-clothes" class="text-[18px] font-semibold mb-4">בגדים ואקססוריז</h3>
+            <div class="tile warm !py-5 !px-5">
+              <label class="packing-item"><input type="checkbox" /><span>3–4 בגדי ים 👙</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>בגדי חוף / שמלות חוף / פראו</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>בגדי ערב ליציאות (שמלות, סטים)</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>בגדי נוחות לטיסה</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>פיג׳מות / בגדי בית לבוקר בוילה</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>עליונית קלה או ג׳קט לערב כשיש בריזה</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>כפכפים לבריכה, סנדלים נוחים ליום ונעליים ליציאה</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>כובע ומשקפי שמש</span></label>
+            </div>
+          </section>
+
+          <section class="packing-group" aria-labelledby="packing-care">
+            <h3 id="packing-care" class="text-[18px] font-semibold mb-4">טיפוח וקוסמטיקה</h3>
+            <div class="tile !py-5 !px-5">
+              <label class="packing-item"><input type="checkbox" /><span>קרם הגנה לפנים ולגוף</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>קרם לחות לפנים ולגוף</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>איפור, מסיר איפור, צמר גפן</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>דאודורנט ובושם</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>תיק רחצה: שמפו, מרכך, סבון גוף, מברשת ומשחת שיניים</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>מברשת שיער, גומיות, קליפסים</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>תרופות בסיסיות (משככי כאבים, פלסטרים, תרופות מרשם)</span></label>
+              <label class="packing-item"><input type="checkbox" /><span>מוצרי היגיינה נשית</span></label>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ============ DETAILS ============ -->
-    <section class="shell reveal" style="--d:80ms" aria-labelledby="details-title">
+    <section class="shell reveal stack-details" style="--d:80ms" aria-labelledby="details-title">
       <div class="card card-body">
 
         <div class="text-center mb-10">
@@ -682,7 +995,7 @@
             <svg viewBox="0 0 64 64" class="w-7 mx-auto mb-2.5" aria-hidden="true"><use href="#ico-leaf" width="64" height="64" style="--wash:var(--sage)"/></svg>
             <h3 class="caps text-[11.5px] text-deepSlate mb-3">Villa (3 Nights)</h3>
             <p class="text-[26px] num text-deepSlate">&euro;250</p>
-            <p class="caps text-[9.5px] num mt-1.5 opacity-55">&asymp; &#8362;868</p>
+            <p class="text-[10px] num mt-1.5 opacity-55 tracking-wider">&asymp; &#8362;868</p>
             <p class="font-hebrew font-light text-[13px] mt-2.5 opacity-70" dir="rtl">סה&quot;כ, לאחת</p>
           </div>
 
@@ -690,7 +1003,7 @@
             <svg viewBox="0 0 64 64" class="w-7 mx-auto mb-2.5" aria-hidden="true"><use href="#ico-lemon" width="64" height="64" style="--wash:var(--gold); --wash-2:var(--olive)"/></svg>
             <h3 class="caps text-[11.5px] text-deepSlate mb-3">Car Rental</h3>
             <p class="text-[26px] num font-hebrew text-deepSlate" dir="ltr">&#8362;200</p>
-            <p class="caps text-[9.5px] num mt-1.5 opacity-55">&asymp; &euro;58</p>
+            <p class="text-[10px] num mt-1.5 opacity-55 tracking-wider">&asymp; &euro;58</p>
             <p class="font-hebrew font-light text-[13px] mt-2.5 opacity-70" dir="rtl">סה&quot;כ, לאחת</p>
           </div>
 
@@ -705,7 +1018,7 @@
     </section>
 
     <!-- ============ FOOTER ============ -->
-    <footer class="reveal text-center pt-2 pb-6" style="--d:60ms" dir="ltr">
+    <footer class="reveal stack-footer text-center pt-2 pb-6" style="--d:60ms" dir="ltr">
       <svg viewBox="0 0 180 40" class="w-28 mx-auto mb-3" aria-hidden="true">
         <use href="#ico-starfish" x="6" y="2" width="30" height="30" style="--wash:var(--coral)"/>
         <use href="#ico-clam" x="46" y="4" width="28" height="28" style="--wash:var(--sand)"/>
@@ -831,6 +1144,59 @@
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(function () { track.style.height = ''; paint(current); });
       }
+    })();
+
+    (function () {
+      var strip = document.getElementById('villa-strip');
+      if (!strip) return;
+
+      var photos = Array.prototype.slice.call(strip.querySelectorAll('.villa-photo'));
+      var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-villa-nav]'));
+      var counter = document.getElementById('villa-counter');
+      var current = 0;
+
+      function paint(i) {
+        current = Math.max(0, Math.min(photos.length - 1, i));
+        buttons.forEach(function (button) {
+          var direction = Number(button.dataset.villaNav);
+          button.disabled = (direction < 0 && current === 0) || (direction > 0 && current === photos.length - 1);
+        });
+        if (counter) counter.textContent = (current + 1) + ' / ' + photos.length;
+      }
+
+      function goTo(i) {
+        i = Math.max(0, Math.min(photos.length - 1, i));
+        photos[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        paint(i);
+      }
+
+      function nearestPhoto() {
+        var stripLeft = strip.getBoundingClientRect().left;
+        var best = 0;
+        var bestGap = Infinity;
+        photos.forEach(function (photo, index) {
+          var gap = Math.abs(photo.getBoundingClientRect().left - stripLeft);
+          if (gap < bestGap) { bestGap = gap; best = index; }
+        });
+        return best;
+      }
+
+      var pending;
+      strip.addEventListener('scroll', function () {
+        cancelAnimationFrame(pending);
+        pending = requestAnimationFrame(function () { paint(nearestPhoto()); });
+      }, { passive: true });
+
+      buttons.forEach(function (button) {
+        button.addEventListener('click', function () { goTo(current + Number(button.dataset.villaNav)); });
+      });
+
+      strip.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowLeft') { event.preventDefault(); goTo(current - 1); }
+        if (event.key === 'ArrowRight') { event.preventDefault(); goTo(current + 1); }
+      });
+
+      paint(0);
     })();
 
     (function () {
