@@ -99,13 +99,14 @@
 
     .page-stack { display: flex; flex-direction: column; }
     .stack-invitation { order: 1; }
-    .stack-countdown  { order: 2; }
-    .stack-flight     { order: 3; }
-    .stack-villa      { order: 4; }
-    .stack-itinerary  { order: 5; }
-    .stack-details    { order: 6; }
-    .stack-packing    { order: 7; }
-    .stack-footer     { order: 8; }
+    .stack-crew       { order: 2; }
+    .stack-countdown  { order: 3; }
+    .stack-flight     { order: 4; }
+    .stack-villa      { order: 5; }
+    .stack-itinerary  { order: 6; }
+    .stack-details    { order: 7; }
+    .stack-packing    { order: 8; }
+    .stack-footer     { order: 9; }
 
     .card {
       position: relative;
@@ -126,6 +127,31 @@
     .card-body {
       --pad-x: clamp(1.5rem, 7vw, 2.75rem);
       padding: clamp(2.25rem, 9vw, 3.75rem) var(--pad-x);
+    }
+
+    .crew-photo {
+      position: relative;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      aspect-ratio: 4 / 5;
+      background: var(--sand);
+      box-shadow: 0 8px 24px rgba(78, 98, 111, .18);
+    }
+    .crew-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(210, 162, 68, .42);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+    .crew-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     .rule {
@@ -497,12 +523,52 @@
 
     /* Phones: give the active day more room and calm the ghost numeral down */
     @media (max-width: 480px) {
+      body::before {
+        background-color: var(--stripe);
+        background-image: none;
+      }
+
+      .page-stack { padding-inline: 1.25rem !important; }
+      .card-body {
+        --pad-x: 1.25rem;
+        padding: 2rem var(--pad-x);
+      }
+      .card::after { inset: 10px; }
+
+      .caps { letter-spacing: .24em; }
+
+      .crew-photo { border-radius: 14px; }
+
+      .flight-route { gap: .35rem; }
+      .flight-route > div:not(.flight-line) > p:first-child { font-size: 1.65rem; }
+      .flight-line { gap: .25rem; }
+      .flight-line::before,
+      .flight-line::after { width: .65rem; }
+
+      .villa-strip { gap: .6rem; }
+      .villa-photo { flex-basis: 88%; }
+      .villa-nav-btn { width: 44px; height: 44px; }
+
+      .tile { padding: 1.4rem 1rem 1.25rem; }
+      .packing-item { gap: .65rem; }
+      .packing-item input { width: 1.15rem; height: 1.15rem; }
+
       .track { padding-inline: 7%; gap: 4%; }
       .day { padding: 1.5rem .5rem .75rem; }
       .day-ghost { font-size: 4rem; opacity: .22; }
       .rail { margin-bottom: 1.75rem; }
       .tl-ico { width: 34px; height: 34px; }
-      .nav-btn { width: 40px; height: 40px; }
+      .nav-btn { width: 44px; height: 44px; }
+    }
+
+    @media (max-width: 350px) {
+      .page-stack { padding-inline: 1rem !important; }
+      .card-body {
+        --pad-x: 1rem;
+        padding-inline: var(--pad-x);
+      }
+      .flight-route > div:not(.flight-line) > p:first-child { font-size: 1.45rem; }
+      .flight-route > div:not(.flight-line) > p:nth-child(2) { font-size: 1rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -644,6 +710,22 @@
 
       </div>
     </main>
+
+    <!-- ============ THE CREW ============ -->
+    <section class="shell reveal stack-crew" style="--d:80ms" aria-labelledby="crew-title">
+      <div class="card card-body">
+        <div class="text-center mb-8">
+          <svg viewBox="0 0 64 64" class="w-12 mx-auto mb-3 drift-slow" aria-hidden="true">
+            <use href="#ico-party" width="64" height="64" />
+          </svg>
+          <h2 id="crew-title" class="font-script text-[2.75rem] sm:text-[3.1rem] leading-none text-slateBlue" dir="ltr">The Crew</h2>
+        </div>
+
+        <figure class="crew-photo">
+          <img src="image.png" alt="טל וחברות הכלה יחד" />
+        </figure>
+      </div>
+    </section>
 
     <!-- ============ COUNTDOWN ============ -->
     <section class="shell reveal stack-countdown" style="--d:80ms" aria-labelledby="countdown-title">
@@ -980,13 +1062,13 @@
       </div>
     </section>
 
-    <!-- ============ DETAILS ============ -->
+    <!-- ============ COSTS ============ -->
     <section class="shell reveal stack-details" style="--d:80ms" aria-labelledby="details-title">
       <div class="card card-body">
 
         <div class="text-center mb-10">
           <svg viewBox="0 0 64 64" class="w-12 mx-auto mb-3 drift-slow" aria-hidden="true"><use href="#ico-nautilus" width="64" height="64" style="--wash:var(--sand)"/></svg>
-          <h2 id="details-title" class="font-script text-[2.75rem] sm:text-[3.1rem] leading-none text-slateBlue" dir="ltr">The Details</h2>
+          <h2 id="details-title" class="font-script text-[2.75rem] sm:text-[3.1rem] leading-none text-slateBlue" dir="ltr">The Costs</h2>
         </div>
 
         <div class="space-y-5 text-center" dir="ltr">
@@ -1002,8 +1084,8 @@
           <div class="tile">
             <svg viewBox="0 0 64 64" class="w-7 mx-auto mb-2.5" aria-hidden="true"><use href="#ico-lemon" width="64" height="64" style="--wash:var(--gold); --wash-2:var(--olive)"/></svg>
             <h3 class="caps text-[11.5px] text-deepSlate mb-3">Car Rental</h3>
-            <p class="text-[26px] num font-hebrew text-deepSlate" dir="ltr">&#8362;200</p>
-            <p class="text-[10px] num mt-1.5 opacity-55 tracking-wider">&asymp; &euro;58</p>
+            <p class="text-[26px] num text-deepSlate">&euro;58</p>
+            <p class="text-[10px] num mt-1.5 opacity-55 tracking-wider">&asymp; &#8362;200</p>
             <p class="font-hebrew font-light text-[13px] mt-2.5 opacity-70" dir="rtl">סה&quot;כ, לאחת</p>
           </div>
 
