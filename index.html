@@ -159,7 +159,6 @@
       background: linear-gradient(to right, transparent, rgba(101,123,138,.38), transparent);
     }
 
-    /* Each day is bare typography on the paper — no panel, no clutter */
     .day {
       position: relative;
       padding: 2rem 1.25rem 1rem;
@@ -197,8 +196,6 @@
       background: linear-gradient(to right, transparent, rgba(101, 123, 138, .28), transparent);
     }
 
-    /* Wide horizontal day track — the neighbours stay in frame but blurred.
-       Stops just inside the scalloped edge. */
     .bleed { margin-inline: calc(-1 * var(--pad-x) + 1rem); }
 
     .track {
@@ -228,7 +225,6 @@
     }
     .track > .day.is-active { opacity: 1; filter: none; transform: none; }
 
-    /* Hand-drawn timeline above the track */
     .rail {
       position: relative;
       display: grid;
@@ -319,7 +315,6 @@
     .nav-btn:disabled { opacity: .25; }
     .nav-btn:not(:disabled):hover { border-color: rgba(101,123,138,.75); transform: scale(1.09); }
 
-    /* Soft tinted tile for the detail rows */
     .tile {
       --tint: 198, 223, 238;
       position: relative;
@@ -351,7 +346,6 @@
       background: rgba(101, 123, 138, .35);
     }
 
-    /* Packing checklist — tactile, compact and easy to scan on mobile */
     .packing-group + .packing-group {
       margin-top: 2rem;
       padding-top: 2rem;
@@ -383,7 +377,6 @@
       text-decoration-color: var(--gold-deep);
     }
 
-    /* Villa photo strip — horizontal snap-scroll gallery */
     .villa-strip {
       display: flex;
       gap: .75rem;
@@ -481,11 +474,9 @@
 
     .draw-fine { stroke-width: .85; }
 
-    /* Watercolour fills; each <use> sets --wash / --wash-2 to recolour the same drawing */
     .wash   { fill: var(--wash, transparent); stroke: none; }
     .wash-2 { fill: var(--wash-2, transparent); stroke: none; }
 
-    /* Small illustrations scattered inside the day panels */
     .deco {
       position: absolute;
       pointer-events: none;
@@ -503,12 +494,10 @@
     }
     .reveal.is-visible { opacity: 1; transform: none; }
 
-    /* On phones: skip the fade-in entirely so content is instantly usable */
     @media (max-width: 640px) {
       .reveal { opacity: 1; transform: none; transition: none; }
     }
 
-    /* Slow drift, gives the line-art shells a little life */
     @keyframes drift {
       0%, 100% { transform: translateY(0) rotate(0deg); }
       50%      { transform: translateY(-6px) rotate(-1.2deg); }
@@ -521,7 +510,6 @@
       outline-offset: 4px;
     }
 
-    /* Phones: give the active day more room and calm the ghost numeral down */
     @media (max-width: 480px) {
       body::before {
         background-color: var(--stripe);
@@ -583,7 +571,7 @@
 <body class="font-serifEng text-slateBlue selection:bg-stripeBlue selection:text-white">
 
   <!-- Line-art shell set, referenced with <use> throughout -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <svg style="position:absolute; width:0; height:0; pointer-events:none;" aria-hidden="true" focusable="false">
     <defs>
       <symbol id="ico-scallop" viewBox="0 0 64 64">
         <path class="wash" d="M32 57C18 57 8 46 8 30q4-9 8 0 4-9 8 0 4-9 8 0 4-9 8 0 4-9 8 0 4-9 8 0 0 16-10 24-6 3-14 3Z"/>
@@ -604,13 +592,11 @@
       <symbol id="ico-wave" viewBox="0 0 120 24">
         <path class="draw draw-fine" d="M4 14q11-9 22 0t22 0 22 0 22 0 22 0"/>
       </symbol>
-
       <symbol id="ico-starfish" viewBox="0 0 64 64">
         <path class="wash" d="M32 8q6.5 17.1 24.7 18-14.2 11.4-9.4 29Q32 45 16.7 55q4.8-17.6-9.4-29Q25.5 25.1 32 8Z"/>
         <path class="draw" d="M32 8q6.5 17.1 24.7 18-14.2 11.4-9.4 29Q32 45 16.7 55q4.8-17.6-9.4-29Q25.5 25.1 32 8Z"/>
         <path class="draw draw-fine" d="M32 20v6M25 32h2M37 32h2M28 41h1M36 41h1"/>
       </symbol>
-
       <symbol id="ico-lemon" viewBox="0 0 64 64">
         <path class="wash-2" d="M34 24c7-11 16-14 22-11-2 9-10 15-19 13z"/>
         <path class="draw" d="M34 24c7-11 16-14 22-11-2 9-10 15-19 13z"/>
@@ -621,7 +607,6 @@
           <path class="draw draw-fine" d="M45 40h4M7 40h4"/>
         </g>
       </symbol>
-
       <symbol id="ico-cocktail" viewBox="0 0 64 64">
         <path class="wash" d="M15 17h34L32 36z"/>
         <path class="draw" d="M13 16h38L32 37 13 16Z"/>
@@ -630,19 +615,16 @@
         <circle class="wash-2" cx="44" cy="14" r="4"/>
         <circle class="draw" cx="44" cy="14" r="4"/>
       </symbol>
-
       <symbol id="ico-leaf" viewBox="0 0 64 64">
         <path class="wash" d="M32 58C21 45 19 25 32 6c13 19 11 39 0 52Z"/>
         <path class="draw" d="M32 58C21 45 19 25 32 6c13 19 11 39 0 52Z"/>
         <path class="draw draw-fine" d="M32 12v44M32 22l-8 4M32 22l8 4M32 33l-9 5M32 33l9 5M32 44l-8 5M32 44l8 5"/>
       </symbol>
-
       <symbol id="ico-sun" viewBox="0 0 64 64">
         <circle class="wash" cx="32" cy="32" r="14"/>
         <circle class="draw" cx="32" cy="32" r="14"/>
         <path class="draw draw-fine" d="M32 4v8M32 52v8M4 32h8M52 32h8M12 12l6 6M46 46l6 6M52 12l-6 6M18 46l-6 6"/>
       </symbol>
-
       <symbol id="ico-cone" viewBox="0 0 64 64">
         <path class="wash-2" d="M20 32h24L32 60z"/>
         <path class="draw" d="M20 32h24L32 60 20 32Z"/>
@@ -651,19 +633,16 @@
         <path class="draw" d="M20 32c0-9 5-16 12-16s12 7 12 16"/>
         <path class="draw draw-fine" d="M25 24q7-6 14 0"/>
       </symbol>
-
       <symbol id="ico-plane" viewBox="0 0 64 64">
         <path class="draw" d="M57 9 7 31l21 6 6 20z"/>
         <path class="draw draw-fine" d="M57 9 28 37"/>
         <path class="draw draw-fine" d="M34 57l6-9M28 37l9-3"/>
       </symbol>
-
       <symbol id="ico-party" viewBox="0 0 64 64">
         <path class="draw" d="M5 16q27 17 54 0"/>
         <path class="draw draw-fine" d="M13 21l8-1-3 10zM28 26l8 0-4 10zM43 22l8-2-3 10z"/>
         <path class="draw draw-fine" d="M12 42l3 3M32 47l0 4M52 42l-3 3M22 52l2 2M42 52l-2 2"/>
       </symbol>
-
       <symbol id="ico-sea" viewBox="0 0 64 64">
         <path class="draw" d="M4 26q8-8 16 0t16 0 16 0 8-2"/>
         <path class="draw" d="M4 38q8-8 16 0t16 0 16 0 8-2"/>
@@ -722,7 +701,8 @@
         </div>
 
         <figure class="crew-photo">
-          <img src="image.png" alt="טל וחברות הכלה יחד" />
+          <!-- Use a direct URL to an image hosted online -->
+          <img src="https://i.imgur.com/YOUR_IMAGE_ID.jpg" alt="טל וחברות הכלה יחד" />
         </figure>
       </div>
     </section>
@@ -956,11 +936,6 @@
     </section>
 
     <!-- ============ THE VILLA ============ -->
-    <!--
-      להחלפת התמונות:
-        • שמרי קבצים בתיקייה villa/ ליד ה-index.html ועדכני src (למשל villa/1.jpg)
-        • או פשוט הכניסי כתובת URL מלאה של תמונה מהאינטרנט (Google Drive לא יעבוד ישירות – השתמשי ב-Imgur / Cloudinary / Dropbox share link)
-    -->
     <section class="shell reveal stack-villa" style="--d:80ms" aria-labelledby="villa-title">
       <div class="card card-body">
 
@@ -1121,6 +1096,8 @@
         els.forEach(function (el) { el.classList.add('is-visible'); });
         return;
       }
+      
+      // BUG FIX: Changed threshold to 0 so exceptionally tall elements on mobile don't fail to intersect and stay invisible forever
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) {
@@ -1128,7 +1105,8 @@
             io.unobserve(e.target);
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+      
       els.forEach(function (el) { io.observe(el); });
 
       /* Safety net: never leave content invisible if the observer never fires. */
@@ -1152,6 +1130,7 @@
       var navs = Array.prototype.slice.call(document.querySelectorAll('.nav-btn'));
       var last = slides.length - 1;
       var current = 0;
+      var pending, lockUntil = 0;
 
       function paint(i) {
         current = i;
@@ -1171,7 +1150,11 @@
       function goTo(i) {
         i = Math.max(0, Math.min(last, i));
         lockUntil = Date.now() + 800; // ignore the smooth-scroll's intermediate positions
-        slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        
+        // BUG FIX: Used track.scrollTo instead of scrollIntoView to prevent the browser from annoyingly jumping vertically
+        var targetLeft = track.scrollLeft + (slides[i].getBoundingClientRect().left - track.getBoundingClientRect().left) - (track.clientWidth - slides[i].clientWidth) / 2;
+        track.scrollTo({ left: targetLeft, behavior: 'smooth' });
+        
         paint(i);
       }
 
@@ -1187,7 +1170,6 @@
         return best;
       }
 
-      var pending, lockUntil = 0;
       track.addEventListener('scroll', function () {
         if (Date.now() < lockUntil) return;
         cancelAnimationFrame(pending);
@@ -1216,12 +1198,17 @@
           var prev = track.style.scrollBehavior;
           track.style.scrollBehavior = 'auto';
           track.style.height = '';
-          slides[current].scrollIntoView({ inline: 'center', block: 'nearest' });
+          
+          var targetLeft = track.scrollLeft + (slides[current].getBoundingClientRect().left - track.getBoundingClientRect().left) - (track.clientWidth - slides[current].clientWidth) / 2;
+          track.scrollTo({ left: targetLeft });
+          
           track.style.scrollBehavior = prev;
           paint(current);
         }, 120);
       });
+      
       paint(0);
+      
       // Webfonts change the slide heights, so re-measure once they land.
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(function () { track.style.height = ''; paint(current); });
@@ -1236,6 +1223,8 @@
       var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-villa-nav]'));
       var counter = document.getElementById('villa-counter');
       var current = 0;
+      var lockUntil = 0; // BUG FIX: Added lock throttle to fix rapid flickering of counters/buttons on scroll
+      var pending;
 
       function paint(i) {
         current = Math.max(0, Math.min(photos.length - 1, i));
@@ -1248,7 +1237,12 @@
 
       function goTo(i) {
         i = Math.max(0, Math.min(photos.length - 1, i));
-        photos[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        lockUntil = Date.now() + 800; // Ignore intersection updates while actively animating
+        
+        // BUG FIX: Prevented vertical page jump layout shifting by switching away from scrollIntoView
+        var targetLeft = strip.scrollLeft + (photos[i].getBoundingClientRect().left - strip.getBoundingClientRect().left);
+        strip.scrollTo({ left: targetLeft, behavior: 'smooth' });
+        
         paint(i);
       }
 
@@ -1263,8 +1257,8 @@
         return best;
       }
 
-      var pending;
       strip.addEventListener('scroll', function () {
+        if (Date.now() < lockUntil) return;
         cancelAnimationFrame(pending);
         pending = requestAnimationFrame(function () { paint(nearestPhoto()); });
       }, { passive: true });
