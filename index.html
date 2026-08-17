@@ -203,6 +203,7 @@
 
     .track {
       display: flex;
+      direction: ltr;
       align-items: flex-start;
       gap: 3%;
       padding-inline: 12%;
@@ -386,6 +387,7 @@
     /* Villa photo strip — horizontal snap-scroll gallery */
     .villa-strip {
       display: flex;
+      direction: ltr;
       gap: .75rem;
       overflow-x: auto;
       overflow-y: hidden;
@@ -393,7 +395,7 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
-      touch-action: pan-x pinch-zoom;
+      touch-action: pan-x pan-y pinch-zoom;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
@@ -525,15 +527,24 @@
     @media (max-width: 480px) {
       body::before {
         background-color: var(--stripe);
-        background-image: repeating-linear-gradient(
-          to right,
-          var(--stripe) 0,
-          var(--stripe) var(--stripe-w),
-          var(--paper) var(--stripe-w),
-          var(--paper) calc(var(--stripe-w) * 2)
-        );
-        background-size: calc(var(--stripe-w) * 2) 100%;
-        background-position: center top;
+        background-image:
+          repeating-linear-gradient(
+            to right,
+            var(--stripe) 0,
+            var(--stripe) var(--stripe-w),
+            var(--paper) var(--stripe-w),
+            var(--paper) calc(var(--stripe-w) * 2)
+          ),
+          repeating-linear-gradient(
+            to left,
+            var(--stripe) 0,
+            var(--stripe) var(--stripe-w),
+            var(--paper) var(--stripe-w),
+            var(--paper) calc(var(--stripe-w) * 2)
+          );
+        background-size: 50% 100%, 50% 100%;
+        background-position: left top, right top;
+        background-repeat: no-repeat;
       }
 
       .page-stack { padding-inline: 1.25rem !important; }
@@ -1179,7 +1190,9 @@
       function goTo(i) {
         i = Math.max(0, Math.min(last, i));
         lockUntil = Date.now() + 800; // ignore the smooth-scroll's intermediate positions
-        slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        var pageY = window.scrollY;
+        slides[i].scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
+        window.scrollTo({ top: pageY, left: 0, behavior: 'instant' });
         paint(i);
       }
 
@@ -1224,7 +1237,9 @@
           var prev = track.style.scrollBehavior;
           track.style.scrollBehavior = 'auto';
           track.style.height = '';
-          slides[current].scrollIntoView({ inline: 'center', block: 'nearest' });
+          var pageY = window.scrollY;
+          slides[current].scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
+          window.scrollTo({ top: pageY, left: 0, behavior: 'instant' });
           track.style.scrollBehavior = prev;
           paint(current);
         }, 120);
@@ -1256,7 +1271,9 @@
 
       function goTo(i) {
         i = Math.max(0, Math.min(photos.length - 1, i));
-        photos[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        var pageY = window.scrollY;
+        photos[i].scrollIntoView({ behavior: 'instant', inline: 'start', block: 'nearest' });
+        window.scrollTo({ top: pageY, left: 0, behavior: 'instant' });
         paint(i);
       }
 
